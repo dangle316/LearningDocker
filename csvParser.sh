@@ -6,8 +6,9 @@ file=sampleCSV.csv
 IFS='|'
 while read -r url ip
 do
-        printf "Checking " $url "...\n"
-		curl -o -I -L -s -w "%{http_code}" $url
+        printf "Checking %s ...\n" $url
+		$resposne = curl -o -I -L -s -w "%{http_code}" $url
+		printf "Status: %s!\n"
 
 	
 done < "$file"
