@@ -4,11 +4,10 @@ file=sampleCSV.csv
 
 # set the Internal Field Separator to |
 IFS='|'
-while read -r domain ip webroot ftpusername
+while read -r url ip
 do
-        printf "*** Adding %s to httpd.conf...\n" $domain
-        printf "Setting virtual host using %s ip...\n" $ip
-        printf "DocumentRoot is set to %s\n" $webroot
-        printf "Adding ftp access for %s using %s ftp account...\n\n" $domain $ftpusername
+        printf "Checking " $url "...\n"
+		curl -o -I -L -s -w "%{http_code}" $url
+
 	
 done < "$file"
