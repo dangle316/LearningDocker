@@ -9,7 +9,8 @@
 	- crawl csv
 
 
-
+- notes
+	- PS: docker images -q | foreach {docker rmi $_}
 
 
 - links
