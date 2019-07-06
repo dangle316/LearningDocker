@@ -7,8 +7,8 @@ IFS='|'
 while read -r url ip
 do
         printf "Checking %s ...\n" $url
-		$resposne = curl -o -I -L -s -w "%{http_code}" $url
-		printf "Status: %s!\n"
+		STATUS=$(curl -s -o /dev/null -w '%{http_code}' $url)
+		printf "Status: %s!\n\n" $STATUS
 
 	
 done < "$file"
