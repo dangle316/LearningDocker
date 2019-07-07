@@ -44,6 +44,13 @@ do
 		*)
 			HEALTH=false;;
 	esac
+
+	case $RESPONSE in
+		*$redirecttext*)
+			printf"***REDIRECT***";;
+		*)
+			printf"";;
+	esac
 	
 	# Determine Color from Health
 	if ! $HEALTH;
