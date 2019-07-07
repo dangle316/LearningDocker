@@ -27,7 +27,7 @@ do
 			IPHEADER=$USIP;;
 		*)
 			IPHEADER=$USIP
-			$region = "US"
+			region="US"
 			;;
 	esac		
 
