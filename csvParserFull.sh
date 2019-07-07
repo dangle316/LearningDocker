@@ -19,8 +19,6 @@ do
 
 	HEALTH=0
 	
-	printf "%b Checking %s... " $COLOR $url
-
 	# Build CURL Request
 	case $region in
 		*"CA"*)
@@ -28,8 +26,21 @@ do
 		*"US"*)
 			IPHEADER=$USIP;;
 		*)
-			IPHEADER=$USIP;;
+			IPHEADER=$USIP
+			$region = "US"
+			;;
 	esac		
+
+	#print test case
+	printf "%b Checking (%s" $COLOR $region
+	if [ "$shouldredirect" != '' ]; then
+		if [ "$shouldredirect" == 'yes' ]; then
+			printf("|Redirect")
+		else
+			printf("|NoRedirect")
+		fi
+	fi
+	printf ") %s " $COLOR $url
 
 	# Run Curl Command
 	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
