@@ -35,12 +35,12 @@ do
 	printf "%b Checking (%s" $COLOR $region
 	if [ "$shouldredirect" != '' ]; then
 		if [ "$shouldredirect" == 'yes' ]; then
-			printf("|Redirect")
+			printf "|Redirect"
 		else
-			printf("|NoRedirect")
+			printf "|NoRedirect"
 		fi
 	fi
-	printf ") %s " $COLOR $url
+	printf ") %s " $url
 
 	# Run Curl Command
 	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
@@ -58,9 +58,9 @@ do
 
 	case $RESPONSE in
 		*$redirecttext*)
-			printf"***REDIRECT***";;
+			printf "***REDIRECT***";;
 		*)
-			printf"";;
+			printf "";;
 	esac
 	
 	# Determine Color from Health
