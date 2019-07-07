@@ -7,7 +7,7 @@ RED="\e[31m"
 EOR="|THISISTHEENDOFTHEREQUEST|"
 
 USIP="65.51.93.34"
-CAIP=""
+CAIP="110.33.122.75"
 
 
 # set the Internal Field Separator to |
@@ -24,15 +24,15 @@ do
 	# Build CURL Request
 	case $region in
 		*"CA"*)
-			IPHEADER="-H \"X-Forwarded-For: $CAIP\"";;
+			IPHEADER=$CAIP;;
 		*"US"*)
-			IPHEADER="-H \"X-Forwarded-For: $USIP\"";;
+			IPHEADER=$USIP;;
 		*)
-			IPHEADER="";;
+			IPHEADER=$USIP;;
 	esac		
 
 	# Run Curl Command
-	RESPONSE=$(curl ""$IPHEADER"" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
+	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
 	
 	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
 	STATUS=${RESPONSE#*$EOR}
