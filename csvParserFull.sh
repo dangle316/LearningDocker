@@ -6,13 +6,17 @@ file=sampleCSV.csv
 IFS='|'
 while read -r url ip
 do
-        printf "Checking %s... " $url
+        printf "\e[0m Checking %s... " $url
 		STATUS=$(curl -s -o /dev/null -w '%{http_code} - %{time_total}' $url)
 
 		COLOR="\e[0m"
-
-		if($STATUS!=*"200 -")
-			COLOR="\e[31m"
-
-		printf "%sStatus: %s!\n" $COLOR $STATUS
+		
+		case $STATUS in
+			*"200 -"*)
+				COLOR="\e[0m";;
+			*)
+				COLOR="\e[32m";;
+		esac
+		
+		printf "%b Status: %s!\n" $COLOR $STATUS 
 done < "$file"
