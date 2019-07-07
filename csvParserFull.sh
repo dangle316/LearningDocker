@@ -17,7 +17,7 @@ AUIP="110.33.122.75"
 
 # set the Internal Field Separator to |
 IFS='|'
-while read -r url region shouldredirect redirecttext
+while read -r url region shouldredirect redirecttext dud
 do
 	COLOR=$WHITE
 	IPHEADER=""
@@ -58,14 +58,12 @@ do
 	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code};%{time_total};%{size_download}' $url)
 	printf ".....;"
 
-	printf "%s" $RESPONSE
-
 	#Run PupUp Checks
 	if [ "$shouldredirect" != '' ]; then
 
 		# Parse if PopUp was shown
 		case $RESPONSE in
-			*$redirecttext*)
+			*"$redirecttext"*)
 				POPUPSHOWN=true;;
 			*)
 				POPUPSHOWN=false;;

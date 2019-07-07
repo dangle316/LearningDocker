@@ -4,7 +4,7 @@ file=sampleCSV.csv
 
 # set the Internal Field Separator to |
 IFS='|'
-while read -r url ip
+while read -r url region shouldredirect redirecttext dud
 do
 	printf "Checking %s... " $url
 	

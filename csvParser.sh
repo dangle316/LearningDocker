@@ -8,7 +8,7 @@ RED= "\e[31m"
 
 # set the Internal Field Separator to |
 IFS='|'
-while read -r url ip
+while read -r url region shouldredirect redirecttext dud
 do
 	COLOR=$WHITE
 
