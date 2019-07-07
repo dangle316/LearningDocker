@@ -17,7 +17,8 @@ do
 	COLOR=$WHITE
 	IPHEADER=""
 
-	HEALTH=0
+	POPUPSHOWN=false
+	HEALTH=true
 	
 	# Build CURL Request
 	case $region in
@@ -34,43 +35,56 @@ do
 	#print test case
 	printf "%b Checking (%s" $COLOR $region
 	if [ "$shouldredirect" != '' ]; then
-		if [ "$shouldredirect" == 'yes' ]; then
-			printf "|Redirect"
+		if [ "$shouldredirect" == 'YES' ]; then
+			printf "|PopUp"
 		else
-			printf "|NoRedirect"
+			printf "|NoPopUp"
 		fi
 	fi
-	printf ") %s " $url
+	printf ") %s..." $url
 
 	# Run Curl Command
 	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
+	printf " Status:"
+
+	#Run PupUp Checks
+	if [ "$shouldredirect" != '' ]; then
+
+		# Parse if PopUp was shown
+		case $RESPONSE in
+			*$redirecttext*)
+				POPUPSHOWN=true;;
+			*)
+				POPUPSHOWN=false;;
+		esac
+
+		# Check PopUp for Health
+		if [ "$shouldredirect" == "YES" ] &&  $POPUPSHOWN ; then
+			printf " PopUp "
+		elif [ "$shouldredirect" == "YES" ] &&  ! $POPUPSHOWN ; then
+			printf "%b NoPopUp %b " $RED $WHITE
+			HEALTH=false
+		elif [ "$shouldredirect" == "NO" ] &&  $POPUPSHOWN ; then
+			printf "%b PopUp %s!" $COLOR $STATUS 
+			HEALTH=false
+		elif [ "$shouldredirect" == "NO" ] &&  ! $POPUPSHOWN ; then
+			printf " NoPopUp "
+		fi
+	fi
 	
-	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
+	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring - ***TODO THIS IS VERY POOR PERFORMANCE
 	STATUS=${RESPONSE#*$EOR}
 
-	# Determine Health from Status Code
+	# Check Status Code checks
 	case $STATUS in
 		*"200 -"*)
-			HEALTH=true;;
+			printf " %s" $STATUS;;
 		*)
+			printf "%b %s %b" $RED $STATUS $WHITE
 			HEALTH=false;;
 	esac
-
-	case $RESPONSE in
-		*$redirecttext*)
-			printf "***REDIRECT***";;
-		*)
-			printf "";;
-	esac
 	
-	# Determine Color from Health
-	if ! $HEALTH;
-	then
-		COLOR=$RED
-	fi
-
-	# Output Results		
-	printf "%b Status: %s!\n" $COLOR $STATUS 
+	printf "\n"
 
 
 done < "$file"
