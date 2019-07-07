@@ -22,18 +22,17 @@ do
 	printf "%b Checking %s... " $COLOR $url
 
 	# Build CURL Request
-	if $region != "";
-	then
-		case $region in
-			*"CA"*)
-				IPHEADER="-H \"X-Forwarded-For: $CAIP \""
-			*)
-				IPHEADER="-H \"X-Forwarded-For: $USIP \""
-		esac		
-	fi
-	
+	case $region in
+		*"CA"*)
+			IPHEADER="-H \"X-Forwarded-For: $CAIP \""
+		*"US"*)
+			IPHEADER="-H \"X-Forwarded-For: $USIP \""
+		*)
+			IPHEADER=""
+	esac		
+
 	# Run Curl Command
-	RESPONSE=$(curl -s -w "$IPHEADER" '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
+	RESPONSE=$(curl -s "$IPHEADER" -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
 	
 	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
 	STATUS=${RESPONSE#*$EOR}
