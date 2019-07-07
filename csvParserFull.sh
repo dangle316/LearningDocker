@@ -24,15 +24,15 @@ do
 	# Build CURL Request
 	case $region in
 		*"CA"*)
-			IPHEADER="-H \"X-Forwarded-For: $CAIP \"";;
+			IPHEADER="-H \"X-Forwarded-For: $CAIP\"";;
 		*"US"*)
-			IPHEADER="-H \"X-Forwarded-For: $USIP \"";;
+			IPHEADER="-H \"X-Forwarded-For: $USIP\"";;
 		*)
 			IPHEADER="";;
 	esac		
 
 	# Run Curl Command
-	RESPONSE=$(curl -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
+	RESPONSE=$(curl ""$IPHEADER"" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
 	
 	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
 	STATUS=${RESPONSE#*$EOR}
