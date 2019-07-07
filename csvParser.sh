@@ -7,7 +7,7 @@ IFS='|'
 while read -r url ip
 do
         printf "Checking %s... " $url
-		STATUS=$(curl -s -o /dev/null -w '%{http_code}' $url)
+		STATUS=$(curl -s -o /dev/null -w '%{http_code} - %{time_total}' $url)
 		printf "Status: %s!\n" $STATUS
 
 	
