@@ -2,21 +2,26 @@
 # setupapachevhost.sh - Apache webhosting automation demo script
 file=sampleCSV.csv
 
+WHITE = "\e[0m"
+RED = "\e[31m"
+
+
 # set the Internal Field Separator to |
 IFS='|'
 while read -r url ip
 do
-        printf "\e[0m Checking %s... " $url
-		STATUS=$(curl -s -o /dev/null -w '%{http_code} - %{time_total}' $url)
+	COLOR = $WHITE
 
-		COLOR="\e[0m"
+    printf "%b Checking %s... " $COLOR $url
+
+	STATUS=$(curl -s -o /dev/null -w '%{http_code} - %{time_total}' $url)
+
+	case $STATUS in
+		*"200 -"*)
+			COLOR=$WHITE;;
+		*)
+			COLOR=$RED;;
+	esac
 		
-		case $STATUS in
-			*"200 -"*)
-				COLOR="\e[0m";;
-			*)
-				COLOR="\e[32m";;
-		esac
-		
-		printf "%b Status: %s!\n" $COLOR $STATUS 
+	printf "%b Status: %s!\n" $COLOR $STATUS 
 done < "$file"
