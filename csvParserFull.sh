@@ -6,18 +6,34 @@ WHITE="\e[0m"
 RED="\e[31m"
 EOR="|THISISTHEENDOFTHEREQUEST|"
 
+USIP="65.51.93.34"
+CAIP=""
+
 
 # set the Internal Field Separator to |
 IFS='|'
-while read -r url ip
+while read -r url region shouldredirect redirecttext
 do
 	COLOR=$WHITE
 	HEALTH=0
+	IPHEADER=""
 
 	printf "%b Checking %s... " $COLOR $url
+
+	#build CURL Request
+	if $region != "";
+	then
+		case $STATUS in
+			*"CA"*)
+				IPHEADER="-H \"X-Forwarded-For: $CAIP \""
+			*)
+				IPHEADER="-H \"X-Forwarded-For: $USIP \""
+		esac
+		
+	fi
 	
 	# Run Curl Command
-	RESPONSE=$(curl -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}' $url)
+	RESPONSE=$(curl -s -w "$IPHEADER" '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
 	
 	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
 	STATUS=${RESPONSE#*$EOR}
