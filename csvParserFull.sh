@@ -4,6 +4,7 @@ file=sampleCSV.csv
 
 WHITE="\e[0m"
 RED="\e[31m"
+GREEN="\e[92m"
 EOR="|THISISTHEENDOFTHEREQUEST|"
 
 USIP="65.51.93.34"
@@ -33,19 +34,17 @@ do
 	esac		
 
 	#print test case
-	printf "%b Checking (%s" $COLOR $region
-	if [ "$shouldredirect" != '' ]; then
-		if [ "$shouldredirect" == 'YES' ]; then
-			printf "|PopUp"
-		else
-			printf "|NoPopUp"
-		fi
+	printf "%b Checking;(%s" $COLOR $region
+	if [ "$shouldredirect" == 'YES' ]; then
+		printf "/PopUp"
+	elif [ "$shouldredirect" == 'NO' ]; then
+		printf "/NoPopUp"
 	fi
-	printf ") %s..." $url
+	printf ");%s;" $url
 
 	# Run Curl Command
-	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}s - %{size_download}b' $url)
-	printf " Status:"
+	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code};%{time_total};%{size_download}' $url)
+	printf ".....;"
 
 	#Run PupUp Checks
 	if [ "$shouldredirect" != '' ]; then
@@ -60,16 +59,18 @@ do
 
 		# Check PopUp for Health
 		if [ "$shouldredirect" == "YES" ] &&  $POPUPSHOWN ; then
-			printf " PopUp - "
+			printf "PopUp;"
 		elif [ "$shouldredirect" == "YES" ] &&  ! $POPUPSHOWN ; then
-			printf "%b NoPopUp %b - " $RED $WHITE
+			printf "%bNoPopUp%b;" $RED $WHITE
 			HEALTH=false
 		elif [ "$shouldredirect" == "NO" ] &&  $POPUPSHOWN ; then
-			printf "%b PopUp %b - " $RED $WHITE
+			printf "%bPopUp%b;" $RED $WHITE
 			HEALTH=false
 		elif [ "$shouldredirect" == "NO" ] &&  ! $POPUPSHOWN ; then
-			printf " NoPopUp - "
+			printf "NoPopUp;"
 		fi
+	else
+		printf "NotTested;"
 	fi
 	
 	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring - ***TODO THIS IS VERY POOR PERFORMANCE
@@ -77,14 +78,18 @@ do
 
 	# Check Status Code checks
 	case $STATUS in
-		*"200 -"*)
-			printf " %s" $STATUS;;
+		*"200;"*)
+			printf "%s;" $STATUS;;
 		*)
-			printf "%b %s %b" $RED $STATUS $WHITE
+			printf "%b%s%b;" $RED $STATUS $WHITE
 			HEALTH=false;;
 	esac
+
+	if $HEALTH;
+	then	
+		printf "%bPassed%b\n" $GREEN $WHITE
+	else	
+		printf "%bFailed%b\n" $RED $WHITE
+	fi
 	
-	printf "\n"
-
-
 done < "$file"
