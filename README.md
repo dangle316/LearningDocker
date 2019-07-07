@@ -1,10 +1,5 @@
 # LearningDocker
-- docker file - plain linux
-- install curl
 - script file
-	- hello world
-	- curl response 1
-	- curl resposne csv
 	- check content csv
 	- crawl csv
 
