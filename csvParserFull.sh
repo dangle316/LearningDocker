@@ -15,21 +15,21 @@ IFS='|'
 while read -r url region shouldredirect redirecttext
 do
 	COLOR=$WHITE
-	HEALTH=0
 	IPHEADER=""
 
+	HEALTH=0
+	
 	printf "%b Checking %s... " $COLOR $url
 
-	#build CURL Request
+	# Build CURL Request
 	if $region != "";
 	then
-		case $STATUS in
+		case $region in
 			*"CA"*)
 				IPHEADER="-H \"X-Forwarded-For: $CAIP \""
 			*)
 				IPHEADER="-H \"X-Forwarded-For: $USIP \""
-		esac
-		
+		esac		
 	fi
 	
 	# Run Curl Command
