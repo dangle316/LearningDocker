@@ -8,7 +8,11 @@ GREEN="\e[92m"
 EOR="|THISISTHEENDOFTHEREQUEST|"
 
 USIP="65.51.93.34"
-CAIP="110.33.122.75"
+CAIP="192.206.151.131"
+UKIP="185.35.50.4"
+CNIP="221.192.199.49"
+JPIP="219.118.201.119"
+AUIP="110.33.122.75"
 
 
 # set the Internal Field Separator to |
@@ -24,6 +28,14 @@ do
 	# Build CURL Request
 	case $region in
 		*"CA"*)
+			IPHEADER=$CAIP;;
+		*"UK"*)
+			IPHEADER=$CAIP;;
+		*"CN"*)
+			IPHEADER=$CAIP;;
+		*"JP"*)
+			IPHEADER=$CAIP;;
+		*"AU"*)
 			IPHEADER=$CAIP;;
 		*"US"*)
 			IPHEADER=$USIP;;
@@ -45,6 +57,8 @@ do
 	# Run Curl Command
 	RESPONSE=$(curl -H "X-Forwarded-For: $IPHEADER" -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code};%{time_total};%{size_download}' $url)
 	printf ".....;"
+
+	printf "%s" $RESPONSE
 
 	#Run PupUp Checks
 	if [ "$shouldredirect" != '' ]; then

@@ -1,6 +1,11 @@
 http://www.google.com|||
 http://www.yahoo.com|||
 https://www.forex.com/en-us/|US|NO|redirect-modal-section
+https://www.forex.com/en-us/|CA|YES|redirect-modal-section
+https://www.forex.com/en-us/|UK|YES|redirect-modal-section
+https://www.forex.com/en-us/|CN|YES|redirect-modal-section
+https://www.forex.com/en-us/|JP|YES|redirect-modal-section
+https://www.forex.com/en-us/|AU|YES|redirect-modal-section
 https://www.forex.com/en-us/account-login/|US|YES|redirect-modal-section
 https://www.forex.com/en-us/open-forex-demo-account/|CA|NO|redirect-modal-section
 https://www.forex.com/en-us/simulated-forex-trading/|CA|YES|redirect-modal-section
