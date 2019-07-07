@@ -60,15 +60,15 @@ do
 
 		# Check PopUp for Health
 		if [ "$shouldredirect" == "YES" ] &&  $POPUPSHOWN ; then
-			printf " PopUp "
+			printf " PopUp - "
 		elif [ "$shouldredirect" == "YES" ] &&  ! $POPUPSHOWN ; then
-			printf "%b NoPopUp %b " $RED $WHITE
+			printf "%b NoPopUp %b - " $RED $WHITE
 			HEALTH=false
 		elif [ "$shouldredirect" == "NO" ] &&  $POPUPSHOWN ; then
-			printf "%b PopUp %s!" $COLOR $STATUS 
+			printf "%b PopUp %b - " $RED $WHITE
 			HEALTH=false
 		elif [ "$shouldredirect" == "NO" ] &&  ! $POPUPSHOWN ; then
-			printf " NoPopUp "
+			printf " NoPopUp - "
 		fi
 	fi
 	
