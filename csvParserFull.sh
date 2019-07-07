@@ -25,13 +25,13 @@ do
 	# Determine Health from Status Code
 	case $STATUS in
 		*"200 -"*)
-			HEALTH=0;;
+			HEALTH=true;;
 		*)
-			HEALTH=1;;
+			HEALTH=false;;
 	esac
 	
 	# Determine Color from Health
-	if[$HEALTH==1]
+	if ! $HEALTH;
 	then
 		COLOR=$RED
 	fi
