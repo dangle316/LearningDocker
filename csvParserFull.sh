@@ -12,22 +12,29 @@ IFS='|'
 while read -r url ip
 do
 	COLOR=$WHITE
+	HEALTH=0
 
 	printf "%b Checking %s... " $COLOR $url
 	
 	# Run Curl Command
-	RESPONSE=$(curl -s -w $EOR'%{http_code} - %{time_total}' $url)
+	RESPONSE=$(curl -s -w '|THISISTHEENDOFTHEREQUEST|%{http_code} - %{time_total}' $url)
 	
-	# Parse Status From Respons - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
+	# Parse Status From Response - https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
 	STATUS=${RESPONSE#*$EOR}
 
-	# Determine Color from Status Code
+	# Determine Health from Status Code
 	case $STATUS in
 		*"200 -"*)
-			COLOR=$WHITE;;
+			HEALTH=0;;
 		*)
-			COLOR=$RED;;
+			HEALTH=1;;
 	esac
+	
+	# Determine Color from Health
+	if[$HEALTH==1]
+	then
+		COLOR=$RED
+	fi
 
 	# Output Results		
 	printf "%b Status: %s!\n" $COLOR $STATUS 
