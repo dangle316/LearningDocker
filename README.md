@@ -10,6 +10,8 @@
 	- PS: docker images -q | foreach {docker rmi $_}
 	- PS: docker ps -a -q | foreach {docker rm $_}
 	- docker run -it --name test dangle316/learningdocker
+	- docker cp test:/test.txt test.txt
+	- SH: /csvParserFull.sh -f | tee test.txt
 
 
 - links

@@ -1,5 +1,6 @@
 #!/bin/sh
-# setupapachevhost.sh - Apache webhosting automation demo script
+
+NOCOLORS=false
 file=sampleCSV.csv
 
 WHITE="\e[0m"
@@ -14,6 +15,18 @@ CNIP="221.192.199.49"
 JPIP="219.118.201.119"
 AUIP="110.33.122.75"
 
+# Get Options
+if [ "$1" == '-f' ]; 
+then
+	NOCOLORS=true
+fi
+
+if $NOCOLORS;
+then
+	WHITE=""
+	RED=""
+	GREEN=""
+fi
 
 # set the Internal Field Separator to |
 IFS='|'
@@ -46,7 +59,7 @@ do
 	esac		
 
 	#print test case
-	printf "%b Checking;(%s" $COLOR $region
+	printf "%b Checking;(%s" "$COLOR" $region
 	if [ "$shouldredirect" == 'YES' ]; then
 		printf "/PopUp"
 	elif [ "$shouldredirect" == 'NO' ]; then
