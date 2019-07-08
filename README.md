@@ -1,18 +1,21 @@
 # LearningDocker
 - script file
-	- check content csv for redirects
 	- HTML Report
 	- crawl csv
 
+- Usage
+	- docker pull dangle316/learningdocker
+	- docker run --name test -it dangle316/learningdocker
+	- /csvParserBasic.sh
+	- /csvParser.sh
+	- /csvParserFull.sh
 
 
-- commands
+- helpful commands
 	- PS: docker images -q | foreach {docker rmi $_}
 	- PS: docker ps -a -q | foreach {docker rm $_}
-	- docker run -it --name test dangle316/learningdocker
-	- docker cp test:/test.txt test.txt
 	- SH: /csvParserFull.sh -f | tee test.txt
-
+	- docker cp test:/test.txt test.txt
 
 - links
 	- https://guides.codechewing.com/bash/reuse-html-template-bash
